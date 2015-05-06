@@ -1,0 +1,36 @@
+{% include 'top.html' %}
+
+<div id="startpage">
+
+    <h1>Please, authorize in field above, or register!</h1>
+
+    <ul id="startpageul">
+        <li><input class="authform" name="usernamesignin" required="required" type="text" placeholder="Login or E-mail" /></li>
+        <li><input class="authform" name="passwordsignin" required="required" type="password" placeholder="Password"/></li>
+    </ul>
+
+    <ul id="logbuttons">
+        <li><button type="button" class="butt_log">Log In</button></li>
+        <li><button type="button" class="butt_log sgn">Sign up</button></li>
+    </ul>
+</div>
+
+
+<div id="regpage">
+    <h1>Please, fill information above, to register!</h1>
+    <ul id="regpageul">
+        <li><input class="registr" name="username" required="required" type="text" placeholder="Username or E-mail" /></li>
+        <li><input class="registr" name="password" required="required" type="password" placeholder="Password"></li>
+        <li><input class="registr" name="password" required="required" type="password" placeholder="Confirm password"></li>
+    </ul>
+    <ul id="regbuttons">
+        <li><button type="button" class="butt_sig">Sign up</button></li>
+    </ul>
+</div>
+<script>
+    $('.sgn').click(function(){
+        $('#startpageul').hide();
+        $('#regpage').show();
+    });
+</script>
+{% include 'bottom.html' %}

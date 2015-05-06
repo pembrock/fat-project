@@ -1,0 +1,14 @@
+{% include 'top.html' %}
+<div class="welcome">
+    <p>Список объектов</p>
+</div>
+
+<div class="parent">
+    <div class="block">
+        {% for value in data.objects %}
+            <label><a href="?id={{value.ID}}">{{ value.Title }}</a></label>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% include 'bottom.html' %}

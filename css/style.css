@@ -1,0 +1,112 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    color: #333;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 13px;
+    line-height:1.5em;
+    background-color: #f2f2f2;
+    background-image: url(images/body.jpg);
+    background-repeat: repeat-x;
+    background-position: top;
+}
+#startpage{
+    width: 535px;
+    height: 300px;
+    margin: -150px 0 0 -267px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border: none;
+    background-color: #BECFC6;
+    border-radius: 4px;
+}
+.authform{
+    width: 450px;
+    height: 50px;
+    margin: 10px 0;
+    border: 2px solid #54727F;
+    font-size: 1.8em;
+    text-decoration: none;
+    padding:5px;
+}
+#startpageul{
+    padding-top: 10px;
+    list-style: none;
+}
+h1{
+    font: 2em 'Tahoma', sans-serif;
+    text-align: center;
+}
+
+#logbuttons ul,li{
+    list-style: none;
+    display: inline-block;
+    /*padding-left: 30px;*/
+}
+#logbuttons{
+    margin-left: 25px;
+}
+.butt_log{
+    color: #E7FAF4;
+    border: 2px solid #317E82;
+    background-color: #143436;
+    width: 200px;
+    height: 40px;
+    font-size: 1.4em;
+}
+.butt_log:hover{
+    background-color:  #44AFB5;
+}
+
+#regpage{
+    display: none;
+    width: 535px;
+    height: 400px;
+    margin: -150px 0 0 -267px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border: none;
+    background-color: #BECFC6;
+    border-radius: 4px;
+}
+.registr{
+    width: 440px;
+    height: 50px;
+    margin: 10px 0;
+    border: 2px solid #54727F;
+    font-size: 1.8em;
+    text-decoration: none;
+}
+#regpageul{
+    padding-top: 10px;
+    list-style: none;
+}
+h1{
+    font: 2em 'Tahoma', sans-serif;
+    text-align: center;
+}
+
+#regbuttons ul,li{
+    list-style: none;
+    display: inline-block;
+    /*padding-left: 30px;*/
+}
+#regbuttons{
+    margin-left: 125px;
+}
+.butt_sig{
+    color: #E7FAF4;
+    border: 2px solid #317E82;
+    background-color: #143436;
+    width: 200px;
+    height: 40px;
+    font-size: 1.4em;
+}
+.butt_sig:hover{
+    background-color:  #44AFB5;
+}
+input {
+    padding-left: 10px;
+}

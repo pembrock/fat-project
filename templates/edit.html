@@ -1,0 +1,82 @@
+{% include 'top.html' %}
+<div class="welcome">
+    <p>Регистрация объекта</p>
+</div>
+
+<div class="parent">
+    <div class="block">
+        <div class="right regForm">
+            <label>Вид объекта</label>
+            <div class="field">
+                <input type="radio" name="type" value="1" id="autoserv">
+                <label for="autoserv" class="radio">Автосервис</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="type" value="2" id="market">
+                <label for="market" class="radio">Магазин</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="type" value="3" id="all">
+                <label for="all" class="radio">Все</label>
+            </div>
+            <label>Марки авто</label>
+            <div class="field">
+                <input type="radio" name="typeAuto" value="1" id="sng">
+                <label for="sng" class="radio">СНГ</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="typeAuto" value="2" id="europe">
+                <label for="europe" class="radio">Иномарки Европа</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="typeAuto" value="3" id="asia">
+                <label for="asia" class="radio">Иномарки Азия</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="typeAuto" value="4" id="usa">
+                <label for="usa" class="radio">Иномарки США</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="typeAuto" value="5" id="allAuto">
+                <label for="allAuto" class="radio">Все</label>
+            </div>
+
+        </div>
+        {% for value in data.object %}
+        <div class="left regForm">
+            <div class="field">
+                <label for="title">Название</label>
+                <input type="text" name="title" id="title" placeholder="Пример: РегионМАЗ ООО" value="{{value.Title}}"/>
+            </div>
+            <div class="field">
+                <label for="city">Ваш город</label>
+                <input type="text" name="city" id="city" placeholder="Пример: Москва"/>
+            </div>
+            <div class="field">
+                <label for="address">Ваш адрес</label>
+                <input type="text" name="address" id="address" placeholder="ул. Льва Толстого, 16" value="{{value.Address}}"/>
+            </div>
+            <div class="field">
+                <label for="tel">Ваш телефон</label>
+                <input type="text" name="tel" id="tel" placeholder="(495)123-45-67"  value="{{value.Phone}}"/>
+            </div>
+            <div class="field">
+                <label for="email">Ваш e-mail</label>
+                <input type="text" name="email" id="email" placeholder="vash@mail.ru"  value="{{value.Email}}"/>
+            </div>
+        </div>
+        <div class="descBlock">
+            <div class="field">
+                <label for="description">Краткое описание</label>
+                <textarea name="description" id="description" cols="80" rows="10" placeholder="Краткое описание с указанием марок автомобилей, наличия эвакуатора">{{value.Description}}</textarea>
+            </div>
+            <div class="field">
+                <label for="text">Подробное описание</label>
+                <textarea name="text" id="text" cols="80" rows="10" placeholder="Подробное описание">{{value.Text}}</textarea>
+            </div>
+        </div>
+        {% endfor %}
+        <button>Сохранить</button> <span class="notification"></span>
+    </div>
+</div>
+{% include 'bottom.html' %}

@@ -1,0 +1,116 @@
+{% include 'top.html' %}
+<div class="welcome">
+    <p>Поиск объекта</p>
+</div>
+
+<div class="parent">
+        <div class="block">
+            <label>Ваш город</label>
+            <select name="city" id="city">
+                {% for value in data.cities %}
+                        <option value="{{ value.ID }}">{{ value.Title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="block">
+            <label>Вид объекта</label>
+            <div class="field">
+                <input type="radio" name="type" value="1" id="autoserv">
+                <label for="autoserv" class="radio">Автосервис</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="type" value="2" id="market">
+                <label for="market" class="radio">Магазин</label>
+            </div>
+            <div class="field">
+                <input type="radio" name="type" value="3" id="all">
+                <label for="all" class="radio">Все</label>
+            </div>
+        </div>
+         <div class="block">
+            <label>Марки авто</label>
+             <div class="field">
+                 <input type="radio" name="typeAuto" value="1" id="sng">
+                 <label for="sng" class="radio">СНГ</label>
+             </div>
+             <div class="field">
+                 <input type="radio" name="typeAuto" value="2" id="europe">
+                 <label for="europe" class="radio">Иномарки Европа</label>
+             </div>
+             <div class="field">
+                 <input type="radio" name="typeAuto" value="3" id="asia">
+                 <label for="asia" class="radio">Иномарки Азия</label>
+             </div>
+             <div class="field">
+                 <input type="radio" name="typeAuto" value="4" id="usa">
+                 <label for="usa" class="radio">Иномарки США</label>
+             </div>
+             <div class="field">
+                 <input type="radio" name="typeAuto" value="5" id="allAuto">
+                 <label for="allAuto" class="radio">Все</label>
+             </div>
+        </div>
+    <div class="clear"></div>
+    <button>Показать</button>
+    <div class="clear"></div>
+
+</div>
+
+<div class="parent">
+    <div class="right result">Результат поиска:</div>
+
+    <div id="map" class="map mapBox left"></div>
+
+</div>
+
+<script>
+
+    ymaps.ready(init);
+    function init () {
+        var myMap = new ymaps.Map('map', {
+                    center: [55.76, 37.64],
+                    zoom: 5
+                }),
+                objectManager = new ymaps.ObjectManager({
+                    // Чтобы метки начали кластеризоваться, выставляем опцию.
+                    clusterize: true,
+                    // ObjectManager принимает те же опции, что и кластеризатор.
+                    gridSize: 32
+                });
+        $('button').click(function () {
+            //myMap.removeAllOverlays();
+            city_id = $('#city').val();
+            type = $('input[name=type]:checked').val();
+            typeAuto = $('input[name=typeAuto]:checked').val();
+
+            $.ajax({
+                type: "POST",
+                url: location.href,
+                data: {searchObj: 1, city_id: city_id, type: type, typeAuto: typeAuto},
+                success: function (e) {
+                    //myMap.removeAllOverlays();
+                    objectManager.removeAll();
+                    objectManager.objects.options.set('preset', 'islands#greenDotIcon');
+                    objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
+                    myMap.geoObjects.add(objectManager);
+
+                    objectManager.add(e);
+                    var arr_jsn = $.parseJSON(e);
+                    $('.result').text('');
+                    if (arr_jsn.features.length > 0) {
+                        for (i = 0; i < arr_jsn.features.length; i++) {
+
+                            $('.result').append("<div>" + (i + 1) + ". " + arr_jsn.features[i].properties.balloonContent + "</div>");
+                        }
+                    }
+                    else
+                        $('.result').append("<div>Нет совпадений</div>");
+
+                }
+
+            });
+        });
+    }
+</script>
+
+{% include 'bottom.html' %}

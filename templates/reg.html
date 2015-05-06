@@ -1,0 +1,51 @@
+{% include 'top.html' %}
+<div class="welcome">
+    <p>Регистрация</p>
+</div>
+
+<div class="parent">
+    <span class="notification"></span>
+    <div class="form">
+        <div class="field">
+            <label for="login">Логин</label>
+            <input type="text" name="login" id="login" placeholder="Логин"/>
+        </div>
+        <div class="field">
+            <label for="pass">Пароль</label>
+            <input type="password" name="pass" id="pass" placeholder="Пароль"/>
+        </div>
+        <div class="field">
+            <label for="confirm">Подтверждение пароля</label>
+            <input type="password" name="confirm" id="confirm" placeholder="Пароль еще раз"/>
+        </div>
+        <button>Зарегистрироваться</button>
+    </div>
+</div>
+{% include 'bottom.html' %}
+<script>
+    $('button').click(function () {
+       login = $('#login').val();
+       pass = $('#pass').val();
+       confirm = $('#confirm').val();
+        if (login == '' || pass == '' || confirm == '')
+            alert('Заполнены не все поля');
+        else if(pass != confirm)
+            alert('Пароли не совпадают');
+        else{
+            $.ajax({
+                type: "POST",
+                url: location.href,
+                data: {reg: 1, login: login, pass: pass},
+                success: function (e) {
+                    if (e == "ok"){
+                        $('.form').hide();
+                        $('.notification').text("Регистрация прошла успешно!");
+                    }
+                    else{
+                        $('.notification').text(e);
+                    }
+                }
+            });
+        }
+    });
+</script>
