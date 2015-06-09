@@ -1,0 +1,108 @@
+{% include 'top.html' %}
+
+<div id="startpage">
+
+    <h1 class="regh1">Please, authorize in field above, or register!</h1>
+
+    <ul id="startpageul">
+        <li><input class="authform" name="usernamesignin" required="required" type="text" placeholder="E-mail" /></li>
+        <li><input class="authform" name="passwordsignin" required="required" type="password" placeholder="Password"/></li>
+    </ul>
+
+    <ul id="logbuttons">
+        <li class="logbuttons1 log_proc"><button type="button" class="butt_log">Log In</button></li>
+        <li class="logbuttons1 sgn"><button type="button" class="butt_log">Sign up</button></li>
+    </ul>
+
+
+</div>
+
+<div id="regpage">
+
+    <h1 class="regh1">Please, fill information above, to register!</h1>
+
+    <ul id="regpageul">
+        <li><input class="registr" name="username" required="required" type="text" placeholder="E-mail" /></li>
+        <li><input class="registr" name="password" required="required" type="password" placeholder="Password"></li>
+        <li><input class="registr" name="passwordconfirm" required="required" type="password" placeholder="Confirm password"></li>
+    </ul>
+
+    <ul id="regbuttons">
+        <li><button type="button" class="butt_sig">Sign up</button></li>
+    </ul>
+
+
+</div>
+<script>
+    $('.sgn').click(function(){
+        $('#startpageul').hide();
+        $('#regpage').show();
+    });
+
+    $('.log_proc').click(function() {
+        login = $('input[name="usernamesignin"]').val();
+        pass = $('input[name="passwordsignin"]').val();
+        if (login == '' || pass == '') {
+            if ($('.alert-box').length == 0)
+                $('#startpage').find('h1').after('<div class="alert-box error"><span>error: </span>All fields is required</div>');
+            else {
+                $('#startpage').find('.alert-box').remove();
+                $('#startpage').find('h1').after('<div class="alert-box error"><span>error: </span>All fields is required</div>');
+            }
+        }
+        else{
+            if ($('.alert-box').length == 0)
+                $('#startpage').find('.alert-box').remove();
+            $.ajax({
+                type: "POST",
+                url: "action.php",
+                data: {signin: 1, login: login, pass: pass},
+                success: function(e){
+                    if (e == "ok")
+                        window.location = location.href;
+                    else{
+                        $('#startpage').find('h1').after('<div class="alert-box error"><span>error: </span>'+ e +'</div>');
+                    }
+                }
+            });
+        }
+    });
+
+    $('.butt_sig').click(function(){
+        login = $('input[name="username"]').val();
+        pass = $('input[name="password"]').val();
+        confirmpass = $('input[name="passwordconfirm"]').val();
+        if (login == '' || pass == '') {
+            if ($('.alert-box').length == 0)
+                $('#regpage').find('h1').after('<div class="alert-box error"><span>error: </span>All fields is required</div>');
+            else {
+                $('#regpage').find('.alert-box').remove();
+                $('#regpage').find('h1').after('<div class="alert-box error"><span>error: </span>All fields is required</div>');
+            }
+        }
+        else if(pass != confirmpass){
+            if ($('.alert-box').length == 0)
+                $('#regpage').find('h1').after('<div class="alert-box error"><span>error: </span>Passwords not equal</div>');
+            else {
+                $('#regpage').find('.alert-box').remove();
+                $('#regpage').find('h1').after('<div class="alert-box error"><span>error: </span>Passwords not equal</div>');
+            }
+        }
+        else{
+            $.ajax({
+                type: "POST",
+                url: "action.php",
+                data: {registr: 1, login: login, pass: pass, confirmpass: confirmpass},
+                success: function(e){
+                    if(e == "ok") {
+                        $('#startpage').hide();
+                        $('#regpage').text('').append('<div class="alert-box success"><span>success: </span>Account created. Activation email sent to email.</div>');
+                    }
+                    else
+                        $('#regpage').find('h1').after('<div class="alert-box error"><span>error: </span>'+ e +'</div>');
+
+                }
+            });
+        }
+    });
+</script>

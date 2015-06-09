@@ -6,7 +6,7 @@
  * Time: 14:05
  */
 define("PATH_TO_ROOT", "../");
-define("PAGE_TITLE", "Регистрация объекта");
+define("PAGE_TITLE", "Загруженные файлы");
 require PATH_TO_ROOT . "config.php";
 $t = new DB();
 $result['path_to_root'] = PATH_TO_ROOT;

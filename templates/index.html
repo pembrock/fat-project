@@ -1,36 +1,122 @@
 {% include 'top.html' %}
+{% include 'header.html' %}
+{% include 'left.html' %}
 
-<div id="startpage">
+<div id="content">
 
-    <h1>Please, authorize in field above, or register!</h1>
+    <div id="op_panel">
+            <ul>
+                <li><button type="button" class="butt_op_pan save-query">Save query</button></li>
+                <li><a href="/query/"><button type="button" class="butt_op_pan">Load query</button></a></li>
+                <!--<li><button type="button" class="butt_op_pan">Edit querie</button></li>-->
+                <li><select class="selection_block">
+                    <option value="preview">Preview</option>
+                    <option value="table">Table</option>
+                </select></li>
+            </ul>
+        <span class="notif"></span>
+        </div>
 
-    <ul id="startpageul">
-        <li><input class="authform" name="usernamesignin" required="required" type="text" placeholder="Login or E-mail" /></li>
-        <li><input class="authform" name="passwordsignin" required="required" type="password" placeholder="Password"/></li>
-    </ul>
+        <ul class="ads_125">
+            {% for value in data %}
+            <li><div class="bn_name"><a href="" target="_parent">
+            {% if value.Type == 'Document' %}
+                <img src="/images/Documents.png" alt="banner 1" />
+            {% elseif value.Type == 'Video' %}
+                <img src="/images/Player.png" alt="banner 1" />
+            {% elseif value.Type == 'Image' %}
+                <img src="/images/pictures.png" alt="banner 1" />
+            {% elseif value.Type == 'Sound' %}
+                <img src="/images/music.png" alt="banner 1" />
+            {% else %}
+                <img src="/images/Default.png" alt="banner 1" />
+            {% endif %}
+            </a>
+                <b>Name:</b> {{ value.File_name }}
+                <br><b>Author:</b>
+                    {% if value.Name == '' %}
+                    {{ value.Email }}
+                    {% else %}
+                    {{ value.Name }}
+                    {% endif %}
+                <br><b>Data:</b> {{ value.Date }}
+                <br><b>Type:</b> {{ value.Type }}
+                <br><b>Size:</b> {{ (value.File_size/1048576)|round(2, 'floor')}} Mb
+                <br>
+               <!-- <div class="basic" data-average="0" data-id="{{ value.ID }}"></div>-->
+                <!--	<span class="starRating">
+								<input id="rating5" type="radio" name="rating" value="5" checked>
+								<label for="rating5">5</label>
+								<input id="rating4" type="radio" name="rating" value="4">
+								<label for="rating4">4</label>
+								<input id="rating3" type="radio" name="rating" value="3">
+								<label for="rating3">3</label>
+								<input id="rating2" type="radio" name="rating" value="2">
+								<label for="rating2">2</label>
+								<input id="rating1" type="radio" name="rating" value="1">
+								<label for="rating1">1</label>
+                    </span> -->
+            </div></li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <ul id="logbuttons">
-        <li><button type="button" class="butt_log">Log In</button></li>
-        <li><button type="button" class="butt_log sgn">Sign up</button></li>
-    </ul>
-</div>
-
-
-<div id="regpage">
-    <h1>Please, fill information above, to register!</h1>
-    <ul id="regpageul">
-        <li><input class="registr" name="username" required="required" type="text" placeholder="Username or E-mail" /></li>
-        <li><input class="registr" name="password" required="required" type="password" placeholder="Password"></li>
-        <li><input class="registr" name="password" required="required" type="password" placeholder="Confirm password"></li>
-    </ul>
-    <ul id="regbuttons">
-        <li><button type="button" class="butt_sig">Sign up</button></li>
-    </ul>
 </div>
 <script>
-    $('.sgn').click(function(){
-        $('#startpageul').hide();
-        $('#regpage').show();
+    $('input[name=rating]').on('click', function(){
+        //alert(this.value);
+        $(this).attr('checked', 'checked');
+        //return false;
+    });
+    $('.selection_block').on('change', function() {
+        view =  this.value;
+        $.ajax({
+            type: "POST",
+            url: "../action.php",
+            data: {setView: 1, view: view},
+            success: function(e){
+                window.location = location.href;
+            }
+        });
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        // you can rate 3 times ! After, jRating will be disabled
+        $(".basic").jRating({
+            canRateAgain : true,
+            nbRates : 5,
+            rateMax: 20,
+            onClick: function(element, rate){
+                //alert(rate);
+            }
+        });
+
+        // get the clicked rate !
+        /*$(".basic").jRating({
+            canRateAgain : true,
+            onClick : function(element,rate) {
+                alert(rate);
+            }
+        });*/
+        $('.save-query').on('click', function(){
+            url = location.href;
+            $.ajax({
+                type: "POST",
+                url: "../action.php",
+                data: {saveQuery: 1, url: url},
+                success: function(e){
+                    $('.error-box').text('');
+                    if (e == "ok"){
+                        $('.notif').prepend("<H1>Query was saved!</H1>");
+                    }
+                    else
+                        $('.notif').prepend(e);
+                }
+            });
+        });
     });
 </script>
-{% include 'bottom.html' %}
+<!--{% include 'bottom.html' %}-->

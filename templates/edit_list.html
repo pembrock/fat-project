@@ -1,14 +1,44 @@
 {% include 'top.html' %}
-<div class="welcome">
-    <p>Список объектов</p>
-</div>
+{% include 'header.html' %}
+{% include 'left.html' %}
 
-<div class="parent">
-    <div class="block">
-        {% for value in data.objects %}
-            <label><a href="?id={{value.ID}}">{{ value.Title }}</a></label>
-        {% endfor %}
-        </div>
-    </div>
-</div>
-{% include 'bottom.html' %}
+<table border="1"  CELLPADDING=3 CELLSPACING=0 id="adstable">
+    <tr id="table">
+        <td class="nametable">Name</td>
+        <td class="datetable">Date</td>
+        <td class="typetable">Type</td>
+        <td class="authtable">Author</td>
+        <td class="sizetable">Size</td>
+        <!--<td class="Ratetable">Rate</td>-->
+    </tr>
+    {% for value in data.res %}
+    <tr class="result">
+        <td class="nametable"><a href="/edit/?id={{ value.ID }}">{{ value.File_name }}</a></td>
+        <td class="datetable">{{ value.Date }}</td>
+        <td class="typetable">{{ value.Type }}</td>
+        <td class="authtable">
+            {% if value.Name == '' %}
+            {{ value.Email }}
+            {% else %}
+            {{ value.Name }}
+            {% endif %}
+        </td>
+        <td class="sizetable">{{ (value.File_size/1048576)|round(2, 'floor')}} Mb</td>
+        <!--<td class="Ratetable">-->
+        <!--<div class="basic" data-average="0" data-id="{{ value.ID }}"></div>-->
+        <!--<span class="starRating">
+            <input id="rating5" type="radio" name="rating" value="5">
+            <label for="rating5">5</label>
+            <input id="rating4" type="radio" name="rating" value="4">
+            <label for="rating4">4</label>
+            <input id="rating3" type="radio" name="rating" value="3" checked>
+            <label for="rating3">3</label>
+            <input id="rating2" type="radio" name="rating" value="2">
+            <label for="rating2">2</label>
+            <input id="rating1" type="radio" name="rating" value="1">
+            <label for="rating1">1</label>
+        </span>-->
+        <!--</td>-->
+    </tr>
+    {% endfor %}
+</table>

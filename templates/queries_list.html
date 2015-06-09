@@ -1,0 +1,18 @@
+{% include 'top.html' %}
+{% include 'header.html' %}
+{% include 'left.html' %}
+
+<table border="1"  CELLPADDING=3 CELLSPACING=0 id="adstable">
+    <tr id="table">
+        <td class="nametable">ID</td>
+        <td class="datetable">Query</td>
+    </tr>
+    {% for value in data.res %}
+    <tr class="result">
+
+        <td>{{ value.ID }}</td>
+        <td><a href="{{ value.Query }}">{{ value.Query}}</a></td>
+
+    </tr>
+    {% endfor %}
+</table>

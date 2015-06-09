@@ -1,0 +1,48 @@
+{% include 'top.html' %}
+{% include 'header.html' %}
+{% include 'left.html' %}
+<div id="content">
+
+<div class="cat-title"><h1>SETTINGS</h1></div>
+    <a href="/edit/"> <button type="button" class="butt_log">Edit uploaded files</button></a>
+    <fieldset title="Personal info" class="pinfo">
+        <legend>Personal info</legend>
+        <span class="error-box"></span>
+        <div >
+            <label for="name">Name</label><br>
+            <input type="text" name="name" id="name" value="{{ data.name }}"/>
+        </div>
+        <div >
+            <label for="email">E-mail</label><br>
+            <input type="text" name="email" id="email" value="{{data.email}}" disabled/>
+        </div>
+        <input type="hidden" id="uID" value="{{ data.uID }}"/>
+        <button type="button" class="butt_log save">Save</button>
+    </fieldset>
+</div>
+<script>
+    st_name = $('#name').val();
+    st_email = $('#email').val();
+    $('.save').on('click', function(){
+        name = $('#name').val();
+        email = $('#email').val();
+        uID = $('#uID').val();
+        if(name != st_name || email != st_email){
+            $.ajax({
+                type: "POST",
+                url: "../action.php",
+                data: {upInfo: 1, name: name, email: email, uID: uID},
+                success: function(e){
+                    $('.error-box').text('');
+                    if (e == "ok"){
+                        $('.error-box').prepend("<div class=\"alert-box success\"><span>Success: </span>Your data was saved</div>");
+                    }
+                    else
+                        $('.error-box').prepend("<div class=\"alert-box error\"><span>Error: </span>"+e+"</div>");
+
+                }
+            });
+        }
+
+    })
+</script>

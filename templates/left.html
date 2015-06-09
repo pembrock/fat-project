@@ -1,0 +1,71 @@
+
+
+<div id="content_wraper">
+
+    <div id="queries_searches">
+
+        <ul id="queries">
+
+            <li><h1 class="queriestext">Simple search</h1></li>
+            <li class="search"><input type="search" name="q" id="searchfield" placeholder="Search">
+                <button id="submitsearch"></button></li>
+
+<!--
+            <li><h1 class="queriestext">Type #TAGS</h1></li>
+            <li><input class="qfield" name="Tags" required="required" type="text" placeholder="Tag" /></li>
+            <li><button type="button" id="add">More tags</button></li>
+-->
+            <li><h1 class="queriestext">How it would sourted</h1></li>
+            <li class="radio"><label><input type="radio" name="sort" value="Date" checked/>By date</label></li>
+            <li class="radio"><label><input type="radio" name="sort" value="File_size" />By size</label></li>
+            <!--<li class="radio"><label><input type="radio" name="sort" value="3" />By author</label></li>-->
+            <li class="radio"><label><input type="radio" name="sort" value="Type_id" />By type</label></li>
+            <li class="radio"><label><input type="radio" name="sort" value="File_name" />By name</label></li>
+            <!--<li class="radio"><label><input type="radio" name="sort" value="6" />By rate</label></li>-->
+<!--
+            <li><h1 class="queriestext">Author of upload</h1></li>
+            <li><select class="qfield">
+                <option>author1</option>
+                <option>author2</option>
+            </select></li> -->
+
+            <li><h1 class="queriestext">Type</h1></li>
+            <li><select class="qfield type">
+                <option value="1">Video</option>
+                <option value="2">Image</option>
+                <option value="3">Document</option>
+                <option value="4">Sound</option>
+                <option value="5">Undefined</option>
+            </select></li>
+
+            <li><h1 class="queriestext">Date of upload</h1>	</li>
+            <li><input class="qfield" type="date" name="calendar" value="###" max="###" min="###"></li>
+
+            <li><button id="startsearch">Start!</button></li>
+        </ul>
+
+    </div>
+<!--
+    <div id="view">
+        <ul>
+            <li><button type="button" class="butt_view">Scrolling</button></li>
+            <li><button type="button" class="butt_view">Pager</button></li>
+        </ul>
+    </div>-->
+
+</div>
+        <script>
+            $('#submitsearch').click(function(){
+                search_string = $('#searchfield').val();
+                window.location = "http://fat-project/?s=" + search_string;
+
+            });
+
+            $('#startsearch').click(function () {
+                type = $('.type').val();
+                sort = $('input[name=sort]:checked').val();
+                date = $('input[name=calendar]').val();
+                window.location = "http://fat-project/?search=1&type=" + type + "&sort=" + sort + (date != '' ? ("&date=" + date) : "");
+
+            });
+        </script>

@@ -1,0 +1,95 @@
+{% include 'top.html' %}
+{% include 'header.html' %}
+{% include 'left.html' %}
+
+<div id="content">
+
+    <div id="op_panel">
+        <ul>
+            <li><button type="button" class="butt_op_pan">Save querie</button></li>
+            <li><button type="button" class="butt_op_pan">Load querie</button></li>
+            <li><button type="button" class="butt_op_pan">Edit querie</button></li>
+            <li><select class="selection_block">
+                <option value="table">Table</option>
+                <option value="preview">Preview</option>
+            </select></li>
+        </ul>
+    </div>
+<table border="1"  CELLPADDING=3 CELLSPACING=0 id="adstable">
+    <tr id="table">
+        <td class="nametable">Name</td>
+        <td class="datetable">Date</td>
+        <td class="typetable">Type</td>
+        <td class="authtable">Author</td>
+        <td class="sizetable">Size</td>
+        <!--<td class="Ratetable">Rate</td>-->
+    </tr>
+    {% for value in data %}
+    <tr class="result">
+        <td class="nametable">{{ value.File_name }}</td>
+        <td class="datetable">{{ value.Date }}</td>
+        <td class="typetable">{{ value.Type }}</td>
+        <td class="authtable">
+            {% if value.Name == '' %}
+                {{ value.Email }}
+            {% else %}
+                {{ value.Name }}
+            {% endif %}
+        </td>
+        <td class="sizetable">{{ (value.File_size/1048576)|round(2, 'floor')}} Mb</td>
+        <!--<td class="Ratetable">-->
+            <!--<div class="basic" data-average="0" data-id="{{ value.ID }}"></div>-->
+							<!--<span class="starRating">
+								<input id="rating5" type="radio" name="rating" value="5">
+								<label for="rating5">5</label>
+								<input id="rating4" type="radio" name="rating" value="4">
+								<label for="rating4">4</label>
+								<input id="rating3" type="radio" name="rating" value="3" checked>
+								<label for="rating3">3</label>
+								<input id="rating2" type="radio" name="rating" value="2">
+								<label for="rating2">2</label>
+								<input id="rating1" type="radio" name="rating" value="1">
+								<label for="rating1">1</label>
+							</span>-->
+        <!--</td>-->
+    </tr>
+    {% endfor %}
+</table>
+    </div>
+    <script>
+        $('.selection_block').on('change', function() {
+            view =  this.value;
+            $.ajax({
+                type: "POST",
+                url: "../action.php",
+                data: {setView: 1, view: view},
+                success: function(e){
+                    window.location = location.href;
+                }
+            });
+        })
+    </script>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        // you can rate 3 times ! After, jRating will be disabled
+        $(".basic").jRating({
+            canRateAgain : true,
+            nbRates : 5,
+            rateMax: 20,
+            onClick: function(element, rate){
+                //alert(rate);
+
+            }
+        });
+
+        // get the clicked rate !
+        /*$(".basic").jRating({
+         canRateAgain : true,
+         onClick : function(element,rate) {
+         alert(rate);
+         }
+         });*/
+    });
+</script>
+    <!-- {% include 'bottom.html' %} -->

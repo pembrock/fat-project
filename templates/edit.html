@@ -1,82 +1,79 @@
 {% include 'top.html' %}
-<div class="welcome">
-    <p>Регистрация объекта</p>
-</div>
+{% include 'header.html' %}
+{% include 'left.html' %}
+<div id="content" xmlns="http://www.w3.org/1999/html">
 
-<div class="parent">
-    <div class="block">
-        <div class="right regForm">
-            <label>Вид объекта</label>
-            <div class="field">
-                <input type="radio" name="type" value="1" id="autoserv">
-                <label for="autoserv" class="radio">Автосервис</label>
-            </div>
-            <div class="field">
-                <input type="radio" name="type" value="2" id="market">
-                <label for="market" class="radio">Магазин</label>
-            </div>
-            <div class="field">
-                <input type="radio" name="type" value="3" id="all">
-                <label for="all" class="radio">Все</label>
-            </div>
-            <label>Марки авто</label>
-            <div class="field">
-                <input type="radio" name="typeAuto" value="1" id="sng">
-                <label for="sng" class="radio">СНГ</label>
-            </div>
-            <div class="field">
-                <input type="radio" name="typeAuto" value="2" id="europe">
-                <label for="europe" class="radio">Иномарки Европа</label>
-            </div>
-            <div class="field">
-                <input type="radio" name="typeAuto" value="3" id="asia">
-                <label for="asia" class="radio">Иномарки Азия</label>
-            </div>
-            <div class="field">
-                <input type="radio" name="typeAuto" value="4" id="usa">
-                <label for="usa" class="radio">Иномарки США</label>
-            </div>
-            <div class="field">
-                <input type="radio" name="typeAuto" value="5" id="allAuto">
-                <label for="allAuto" class="radio">Все</label>
-            </div>
+    <div id="item">
+        <!--<div id="itemview">
+            1
+        </div>-->
+        <span class="error-box"></span>
 
-        </div>
-        {% for value in data.object %}
-        <div class="left regForm">
-            <div class="field">
-                <label for="title">Название</label>
-                <input type="text" name="title" id="title" placeholder="Пример: РегионМАЗ ООО" value="{{value.Title}}"/>
-            </div>
-            <div class="field">
-                <label for="city">Ваш город</label>
-                <input type="text" name="city" id="city" placeholder="Пример: Москва"/>
-            </div>
-            <div class="field">
-                <label for="address">Ваш адрес</label>
-                <input type="text" name="address" id="address" placeholder="ул. Льва Толстого, 16" value="{{value.Address}}"/>
-            </div>
-            <div class="field">
-                <label for="tel">Ваш телефон</label>
-                <input type="text" name="tel" id="tel" placeholder="(495)123-45-67"  value="{{value.Phone}}"/>
-            </div>
-            <div class="field">
-                <label for="email">Ваш e-mail</label>
-                <input type="text" name="email" id="email" placeholder="vash@mail.ru"  value="{{value.Email}}"/>
-            </div>
-        </div>
-        <div class="descBlock">
-            <div class="field">
-                <label for="description">Краткое описание</label>
-                <textarea name="description" id="description" cols="80" rows="10" placeholder="Краткое описание с указанием марок автомобилей, наличия эвакуатора">{{value.Description}}</textarea>
-            </div>
-            <div class="field">
-                <label for="text">Подробное описание</label>
-                <textarea name="text" id="text" cols="80" rows="10" placeholder="Подробное описание">{{value.Text}}</textarea>
-            </div>
-        </div>
-        {% endfor %}
-        <button>Сохранить</button> <span class="notification"></span>
+            {% for value in data.res %}
+            File name: {{ value.File_name }}
+            <br>
+<!--
+            <span class="editable">#teg1</span>
+            <span class="editable">#teg2</span>
+            <span class="editable">#teg3</span>
+            <span class="editable">#teg4</span>
+            <span class="editable">#teg5</span>
+            <span class="editable">#teg6</span>
+            <a href="#"><b style="color: #dd1122">+add teg</b></a>
+            <br>-->
+            <p class="itemp">
+                <select class="type-select">
+                {% for type in data.type %}
+                    {% if type.ID == value.Type_id %}
+                    <option value="{{ type.ID}}" selected>{{ type.Title}}</option>
+                    {% else %}
+                    <option value="{{ type.ID}}">{{ type.Title}}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+            </p>
+            <p class="itemp">Type: {{ value.Type }}</p>
+            </br>
+            <p class="itemp">Author: {{ value.Name }}</p>
+            </br>
+            <p class="itemp">Date: {{ value.Date }}</p>
+            </br>
+						<!--<span class="starRating">
+								<input id="rating5" type="radio" name="rating" value="5">
+								<label for="rating5">5</label>
+								<input id="rating4" type="radio" name="rating" value="4">
+								<label for="rating4">4</label>
+								<input id="rating3" type="radio" name="rating" value="3" checked>
+								<label for="rating3">3</label>
+								<input id="rating2" type="radio" name="rating" value="2">
+								<label for="rating2">2</label>
+								<input id="rating1" type="radio" name="rating" value="1">
+								<label for="rating1">1</label>
+							</span>-->
+        <input type="hidden" id="fID" value="{{ value.ID }}"/>
+            {% endfor %}
+        <button type="button" class="butt_log save">Save</button>
+
     </div>
 </div>
-{% include 'bottom.html' %}
+<script>
+$('.save').on('click', function () {
+    type = $('.type-select').val();
+    fID = $('#fID').val();
+    $.ajax({
+        type: "POST",
+        url: "../action.php",
+        data: {editFile:1, type: type, fID: fID},
+        success: function(e){
+            $('.error-box').text('');
+            if (e == "ok"){
+                $('.error-box').prepend("<div class=\"alert-box success\"><span>Success: </span>Your data was saved</div>");
+            }
+            else
+                $('.error-box').prepend("<div class=\"alert-box error\"><span>Error: </span>"+e+"</div>");
+
+        }
+
+    });
+});
+</script>

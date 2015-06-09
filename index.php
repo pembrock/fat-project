@@ -1,54 +1,54 @@
 <?php
 define("PATH_TO_ROOT", "");
 define("PAGE_TITLE", "Главная");
-require PATH_TO_ROOT . "config.php";
+require "lib/bootstrap.php";
 
-
-$t = new DB();
-
-if (isset($_GET['logout'])){
-    unset($_SESSION['UserID']);
-}
-
-if (isset($_POST['log'], $_POST['login'], $_POST['password'])){
-    $cnt = $t->count("Users", "Login = '{$_POST['login']}' AND Password = '" . md5($_POST['password']) . "'"); //проверяем город на наличие в базе
-    if ($cnt > 0){
-        $res = $t->select("SELECT ID FROM Users WHERE Login = '" . $_POST['login'] . "' AND Password = '" . md5($_POST['password']) . "'");
-        foreach($res as $r)
-            $_SESSION['UserID'] = $r["ID"];
-        header('location: /');
-    }
-}
-
-
-if (isset($_POST['getCoords'])) {
-   $coords = array(); $i = 0;
-   $result = $t->select("SELECT * FROM Objects");
-    $str = '{"type": "FeatureCollection", "features": [';
-    foreach ($result as $res)
-       {
-
-      $coords[] =  '{"type": "Feature", "id": '. $res['ID'] .', "geometry": {"type": "Point", "coordinates": ['.$res['Lng_map'].', '.$res['Lat_map'].']}, "properties": {"balloonContent": "'.$res['Title'].'<br><br> ' .$res['Address']. '<br>'. $res['Phone'] .'<br><br>' .$res['Description']. '", "clusterCaption": "Еще одна метка", "hintContent": "'.$res['Title'].'"}}';
-
-
-    }
-
-    $str .= implode(', ', $coords);
-    $str .= ']}';
-    echo $str;
+if (isset($_GET['act'], $_GET['rkey'])){
+    $reg = $auth->activate($_GET['rkey']);
+    if (empty($reg['error']))
+        $template = $twig->loadTemplate('activation.html');
+    else
+        $template = $twig->loadTemplate('error.html');
+    $template->display(array());
     exit;
 }
 
-//$result = $t->select("SELECT Name, Comment, Date, Time FROM comment ORDER BY ID DESC");
-//print_r($_SESSION);
-$result['path_to_root'] = PATH_TO_ROOT;
-$result['page_title'] = PAGE_TITLE;
-if (isset($_SESSION['UserID'])) {
-    $user = $t->select("SELECT Login FROM Users WHERE ID = " . $_SESSION['UserID']);
-    foreach($user as $u)
-        $result['username'] = $u['Login'];
+//$auth->logout($_COOKIE[$config->cookie_name]);
+if(!isset($_COOKIE[$config->cookie_name]) || !$auth->checkSession($_COOKIE[$config->cookie_name]))
+    $template = $twig->loadTemplate('startpage.html');
+else {
+    //print_r($_COOKIE);
+    if (isset($_GET['s']))
+        $query = $dbh->query("SELECT f.ID, f.File_name, f.File_size, f.Date, t.Title AS Type, u.email AS Email, u.Name FROM Files AS f
+                              INNER JOIN Type AS t ON t.ID = f.Type_id
+                              INNER JOIN users AS u on u.id = f.User_id
+                              WHERE File_name LIKE \"%" . $_GET['s'] . "%\"");
+    else if($_GET['search']){
+        $query_string = "f.Type_id = " . $_GET['type'] . (isset($_GET['date']) ? (" AND f.Date >=\"" . $_GET['date'] . " 00:00:00\" AND f.Date <=\"" . $_GET['date'] . " 23:59:59\"") : "");
+        $orderBy = " ORDER BY f." . $_GET['sort'];
+
+        $query = $dbh->query("SELECT f.ID, f.File_name, f.File_size, f.Date, t.Title AS Type, u.email AS Email, u.Name FROM Files AS f
+                              INNER JOIN Type AS t ON t.ID = f.Type_id
+                              INNER JOIN users AS u on u.id = f.User_id
+                              WHERE " . $query_string . $orderBy);
+    }
+    else
+        $query = $dbh->query("SELECT f.ID, f.File_name, f.File_size, f.Date, t.Title AS Type, u.email AS Email, u.Name FROM Files AS f
+                              INNER JOIN Type AS t ON t.ID = f.Type_id
+                              INNER JOIN users AS u on u.id = f.User_id
+                              ORDER BY f.Date DESC");
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    if(isset($_COOKIE['view'])){
+        if($_COOKIE['view'] == 'table')
+            $template = $twig->loadTemplate('index_table.html');
+        else
+            $template = $twig->loadTemplate('index.html');
+    }
+    else
+        $template = $twig->loadTemplate('index.html');
+
 }
-$template = $twig->loadTemplate('index.html');
 $template->display(array('data' => $result));
+
 
 ?>
